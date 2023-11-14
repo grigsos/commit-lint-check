@@ -13,7 +13,7 @@ TEST_COMMIT_MESSAGES = {
     "update: modify README file": 1,
     ": add new logging functionality": 1,
     "refactor codebase: optimize database queries": 1,
-    "testing":1
+    "testing":1 #
 }
 
 @pytest.mark.parametrize("message, expected", TEST_COMMIT_MESSAGES.items())
