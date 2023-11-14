@@ -15,15 +15,18 @@ def check_commit_message(commit_msg_file):
         type_scope_match = re.match(type_scope_regex, header)
 
         # Regular expression for subject
-        subject_regex = r":\s[a-z0-9].*[^\.]$"
+        subject_regex = r".*:\s[a-z0-9].*[^\.]$"
+
         subject_match = re.match(subject_regex, header)
 
         # Check for type and scope validity
         if not type_scope_match or type_scope_match.group(1).lower() != type_scope_match.group(1):
             print("Error: Commit type and scope are invalid, not in lower case, or empty.")
+            return 1
         elif not subject_match:
         # Check for subject validity
             print("Error: Commit subject is invalid.")
+            return 1
         else:
             print("Commit message is valid.")
 

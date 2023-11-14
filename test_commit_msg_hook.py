@@ -14,7 +14,28 @@ def create_temp_commit_message(content):
     ("fix: fix issue with regex\n\n- Fixed regex parsing error.", 0),
     ("docs: updated documentation", 0),  # Missing new line after header
     ("feat(scope): this is a very long message that exceeds the maximum allowed length for a commit message header, which should result in an error", 1),
-    # Add more test cases here
+    
+    
+    # Invalid type or scope
+    ("unknown(scope): added new feature", 1),
+    ("feat(123Scope): invalid scope format", 1),
+
+    # Invalid subject
+    ("feat: ", 1),
+    ("fix: no lowercase subject.", 1),
+
+    # Long header
+    ("feat(scope): " + "a" * 90, 1),  # Header too long
+
+    # Missing blank line after header
+    ("feat(scope): subject\nDetailed explanation.", 1),
+
+    # Long lines in body
+    ("fix: short header\n\n" + "a" * 101, 1),  # Body line too long
+
+    # Footer issues
+    ("feat: short header\n\nBody content\nBREAKING CHANGE: " + "a" * 101, 1),  # Long line in footer
+    ("feat: short header\nBREAKING CHANGE: footer content", 1)  # Missing blank line before footer
 ])
 def test_commit_message(message, expected):
     file_name = create_temp_commit_message(message)
