@@ -1,27 +1,21 @@
 import pytest
+import tempfile
 from scripts.commit_msg_checker import check_commit_message
 
-# Simulate the commit messages in a dictionary
-# Key: Commit message, Value: Expected result (0 for pass, 1 for fail)
-TEST_COMMIT_MESSAGES = {
-    "feat: add new user login feature": 0,
-    "fix: correct minor typo in code": 0,
-    "feat(database): implement new indexing strategy": 0,
-    "chore(build): update build script for new dependencies": 0,
-    "feat add user authentication system": 1,
-    "fix:correct a bug in the API": 1,
-    "update: modify README file": 1,
-    ": add new logging functionality": 1,
-    "refactor codebase: optimize database queries": 1,
-    "testing":1 #
-}
 
-@pytest.mark.parametrize("message, expected", TEST_COMMIT_MESSAGES.items())
-def test_commit_message_format(message, expected, tmp_path):
-    # Write the message to a temporary file
-    tmp_file = tmp_path / "commit_msg"
-    tmp_file.write_text(message)
+def create_temp_commit_message(content):
+    temp_file = tempfile.NamedTemporaryFile(mode='w+t', delete=False)
+    temp_file.write(content)
+    temp_file.close()
+    return temp_file.name
 
-    # Check the commit message
-    result = check_commit_message(str(tmp_file))
-    assert result == expected
+@pytest.mark.parametrize("message,expected", [
+    ("feat(scope): initial commit\n\nDetailed explanation.", 0),
+    ("fix: fix issue with regex\n\n- Fixed regex parsing error.", 0),
+    ("docs: updated documentation", 1),  # Missing new line after header
+    ("feat(scope): this is a very long message that exceeds the maximum allowed length for a commit message header, which should result in an error", 1),
+    # Add more test cases here
+])
+def test_commit_message(message, expected):
+    file_name = create_temp_commit_message(message)
+    assert check_commit_message(file_name) == expected
