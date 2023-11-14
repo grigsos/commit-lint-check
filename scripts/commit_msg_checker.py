@@ -18,3 +18,4 @@ def check_commit_message(commit_msg_file):
 if __name__ == "__main__":
     exit_code = check_commit_message(sys.argv[1])
     sys.exit(exit_code)
+ 
