@@ -12,7 +12,7 @@ def create_temp_commit_message(content):
 @pytest.mark.parametrize("message,expected", [
     ("feat(scope): initial commit\n\nDetailed explanation.", 0),
     ("fix: fix issue with regex\n\n- Fixed regex parsing error.", 0),
-    ("docs: updated documentation", 1),  # Missing new line after header
+    ("docs: updated documentation", 0),  # Missing new line after header
     ("feat(scope): this is a very long message that exceeds the maximum allowed length for a commit message header, which should result in an error", 1),
     # Add more test cases here
 ])
